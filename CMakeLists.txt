@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.6)
 #With this command I am enabling the variables VEM_SOURCE_DIR which specifies the path to
 #headers and footers and the VEM_BINARY_DIR which is where all binary executables will reside.
 #These are defaulted to ./ unless otherwise specified.

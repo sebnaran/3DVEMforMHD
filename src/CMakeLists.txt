@@ -9,3 +9,5 @@ include_directories(../../amanzi/install/tpls/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(../../amanzi/install/tpls/petsc-3.8.2/include)
 
 add_executable(MHD main.cc)
+
+target_link_libraries(MHD ${Trilinos_INSTALL_PREFIX}/lib/libteuchoscore.a)
