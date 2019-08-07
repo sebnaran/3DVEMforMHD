@@ -7,5 +7,5 @@ include_directories(../..//amanzi/install/tpls/include/UnitTest++)
 include_directories(../../amanzi/install/tpls/trilinos-12-12-1/include)
 include_directories(../../amanzi/install/tpls/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(../../amanzi/install/tpls/petsc-3.8.2/include)
-include_directories(./Head/)
+
 add_executable(MHD main.cc)
