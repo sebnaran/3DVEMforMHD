@@ -7,7 +7,8 @@ include_directories(../..//amanzi/install/tpls/include/UnitTest++)
 include_directories(../../amanzi/install/tpls/trilinos-12-12-1/include)
 include_directories(../../amanzi/install/tpls/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(../../amanzi/install/tpls/petsc-3.8.2/include)
-
-add_executable(MHD main.cc)
-
-target_link_libraries(MHD ${Trilinos_INSTALL_PREFIX}/lib/libteuchoscore.a)
+#message("Looherehereherehereherehereherehereherehereherehereherehere")
+#message(${Trilinos_INSTALL_PREFIX})
+#add_executable(MHD main.cc)
+add_executable(TestMHD TestMain.cc)
+#target_link_libraries(MHD ${Trilinos_INSTALL_PREFIX}/lib/libteuchoscore.a)
