@@ -41,7 +41,7 @@ target_link_libraries(TestMHD PUBLIC ${UnitTest_DIR}/lib/libUnitTest++.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libml.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libnox.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libnoxepetra.a
-                              PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libnoaxlapack.a
+                              PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libnoxlapack.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libteuchoscomm.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libtpetra.a
                               PUBLIC ${Trilinos_INSTALL_PREFIX}/lib/libtpetraclassic.a
