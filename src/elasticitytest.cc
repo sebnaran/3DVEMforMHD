@@ -32,7 +32,6 @@
 #include "PDE_Elasticity.hh"
 
 #include "AnalyticElasticity01.hh"
-#include "Verification.hh"
 
 /* *****************************************************************
 * Elasticity model: exactness test.
@@ -152,11 +151,6 @@ TEST(OPERATOR_ELASTICITY_EXACTNESS) {
   global_op->InitializePreconditioner(slist);
   global_op->UpdatePreconditioner();
 
-  // Test SPD properties of the matrix and preconditioner.
-  VerificationCV ver(global_op);
-  ver.CheckMatrixSPD(true, true);
-  ver.CheckPreconditionerSPD(1e-12, true, true);
-
   // solve the problem
   Teuchos::ParameterList lop_list = plist.sublist("solvers")
                                          .sublist("PCG").sublist("pcg parameters");
@@ -166,8 +160,6 @@ TEST(OPERATOR_ELASTICITY_EXACTNESS) {
 
   CompositeVector& rhs = *global_op->rhs();
   int ierr = pcg.ApplyInverse(rhs, solution);
-
-  ver.CheckResidual(solution, 1.0e-14);
 
   if (MyPID == 0) {
     std::cout << "elasticity solver (pcg): ||r||=" << pcg.residual() 
