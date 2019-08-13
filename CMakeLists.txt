@@ -5,11 +5,11 @@ cmake_minimum_required(VERSION 3.10)
 project(VEM LANGUAGES CXX)
 
 #Here we will specify that we want all binary files to be placed in ./build/bin
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+#set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 
 #Now we specify that we want all executables to be placed in the binary directory defined above.
-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
+#set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 #We will need the addresses of several variables throughout amanzi, so we begin by speficying the 
 #module path
