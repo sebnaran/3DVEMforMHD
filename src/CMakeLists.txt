@@ -9,7 +9,7 @@ include_directories(${AMANZI}/include)
 include_directories(${TPLS}/include)
 include_directories(${TPLS}/include/UnitTest++)
 include_directories(${TPLS}/trilinos-12-12-1/include)
-#include_directories(${TPLS}/petsc-3.8.2/include/petsc/mpiuni)
+include_directories(${TPLS}/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(${TPLS}/petsc-3.8.2/include)
 
 link_directories(${AMANZI}/lib 
@@ -43,7 +43,7 @@ set(Nox_interface_libs belostpetra belosepetra belos ml ifpack amesos aztecoo ep
 
 set (Boost_libs boost_system boost_filesystem)
 
-set(HDF5_libs hdf5_hl hdf5 hdf5_hl z m dl)
+set(HDF5_libs hdf5_hl hdf5 hdf5_hl libz.so m dl)
 
 set(TPLS_meshes mstk metis exodus netcdf)
 
