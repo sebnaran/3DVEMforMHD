@@ -7,7 +7,8 @@ rm -rf CMakeCache.txt /build
 cmake \
 -C $HOME/Codes/amanzi/install/tpls/share/cmake/amanzi-tpl-config.cmake \
 -D CMAKE_BUILD_TYPE="Release" \
--D ENABLE_Structured:BOOL=false \
 ./
+#!-D ENABLE_Structured:BOOL=false \
+#!./
 
-make VERBOSE=1
+make #!VERBOSE=1

@@ -9,7 +9,7 @@ include_directories(${AMANZI}/include)
 include_directories(${TPLS}/include)
 include_directories(${TPLS}/include/UnitTest++)
 include_directories(${TPLS}/trilinos-12-12-1/include)
-include_directories(${TPLS}/petsc-3.8.2/include/petsc/mpiuni)
+#include_directories(${TPLS}/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(${TPLS}/petsc-3.8.2/include)
 
 link_directories(${AMANZI}/lib 
@@ -54,3 +54,9 @@ target_link_libraries(TestMHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epe
                               ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
                               UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
 
+
+add_executable(MHD main.cc)
+
+target_link_libraries(MHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+                          ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+                          UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
