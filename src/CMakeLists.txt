@@ -48,15 +48,20 @@ set(HDF5_libs hdf5_hl hdf5 hdf5_hl libz.so m dl)
 set(TPLS_meshes mstk metis exodus netcdf)
 
 # This builds the Test executable.
-add_executable(TestMHD TestMain.cc)
+# add_executable(AmanziTest TestMain.cc)
 
-target_link_libraries(TestMHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
-                              ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
-                              UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
+# target_link_libraries(AmanziTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+#                                  ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+#                                  UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
 
 
-add_executable(MHD main.cc)
+ add_executable(ModifiedAmanziTest ModifiedTestMain.cc)
 
-target_link_libraries(MHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
-                          ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
-                          UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
+ target_link_libraries(ModifiedAmanziTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+                                         ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+                                         UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
+# add_executable(Main main.cc)
+
+# target_link_libraries(Main ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+#                                           ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+#                                           UnitTest++ epetra ${Boost_libs} ${HDF5_libs})

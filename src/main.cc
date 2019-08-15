@@ -23,29 +23,32 @@
 #include "AnalyticElasticity01.hh"
 
 int main(int argc, char *argv[]){
-    std::cout<<"Before argc = "<<argc<<std::endl;
-    std::cout<<"Before argv = "<<argv<<std::endl;
-    std::cout<<"Before *argv = "<<*argv[0]<<std::endl;
-    Teuchos::GlobalMPISession mpiSession(&argc, &argv);
-    std::cout<<"After GlobalMpi session argc = "<<argc<<std::endl;
-    std::cout<<"After GlobalMpi session argv = "<<argv<<std::endl;
-    std::cout<<"After GlobalMpi session *argv = "<<*argv[0]<<std::endl;
-    auto comm = Amanzi::getDefaultComm();
-    std::cout<<"After Comm argc = "<<argc<<std::endl;
-    std::cout<<"After Comm argv = "<<argv<<std::endl;
-    std::cout<<"After Comm *argv = "<<*argv[0]<<std::endl;
-    std::cout<<"Comm="<<comm<<std::endl;
-    int MyPID = comm->MyPID();
-    std::cout<<"MyPID="<<MyPID<<std::endl;
+//     Teuchos::GlobalMPISession mpiSession(&argc, &argv);
+     auto comm = Amanzi::getDefaultComm();
+//     int MyPID = comm->MyPID();
+//   if (MyPID == 0) std::cout << "\nTest: 2D elasticity: exactness test" << std::endl;
 
-    std::string xmlFileName = "test/operator_elasticity.xml";
-    Teuchos::ParameterXMLFileReader xmlreader(xmlFileName);
-    Teuchos::ParameterList plist = xmlreader.getParameters();
-    Teuchos::ParameterList op_list = plist.sublist("PK operator")
-                                        .sublist("elasticity operator");
-    
-    std::cout<< "plist="<<plist<<std::endl;   
-    std::cout<< "op_list="<<op_list<<std::endl; 
-    
+    // std::string xmlFileName = "test/operator_elasticity.xml";
+    // Teuchos::ParameterXMLFileReader xmlreader(xmlFileName);
+    // Teuchos::ParameterList plist = xmlreader.getParameters();
+    // Teuchos::ParameterList interlist = plist.sublist("PK operator");
+    // Teuchos::ParameterList op_list = plist.sublist("PK operator")
+    //                                     .sublist("elasticity operator");
+    // std::cout<<"plist is "<<std::endl<<plist<<std::endl;
+    // std::cout<<"interlist is "<<std::endl<<interlist<<std::endl;
+    // std::cout<<"op_list is "<<std::endl<<op_list<<std::endl;
+  using namespace Amanzi::AmanziMesh;
+  MeshFactory meshfactory(comm);
+  meshfactory.set_preference(Preference({Framework::MSTK, Framework::STK}));
+  Teuchos::RCP<const Mesh> mesh = meshfactory.create(0.0, 0.0, 1.0, 1.0, 4, 5);
+
+  // -- general information about mesh
+//   int ncells = mesh->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED);
+//   int nnodes = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::OWNED);
+//   int nfaces = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::OWNED);
+//   int nfaces_wghost = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::ALL);
+//   int nnodes_wghost = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::ALL);
+
+
     return 0;
 }
