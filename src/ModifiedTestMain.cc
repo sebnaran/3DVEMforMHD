@@ -44,14 +44,14 @@ int main(int argc, char *argv[]){
   Teuchos::ParameterList plist = xmlreader.getParameters();
   Teuchos::ParameterList op_list = plist.sublist("PK operator")
                                         .sublist("elasticity operator");
-  std::cout<<"Hello World2"<<std::endl;
+
   // create the MSTK mesh framework 
   // -- geometric model is not created. Instead, we specify boundary conditions
   // -- using centroids of mesh faces.
   MeshFactory meshfactory(comm);
   meshfactory.set_preference(Preference({Framework::MSTK, Framework::STK}));
   Teuchos::RCP<const Mesh> mesh = meshfactory.create(0.0, 0.0, 1.0, 1.0, 4, 5);
-  std::cout<<"Hello World3"<<std::endl;  
+
   // -- general information about mesh
   int ncells = mesh->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED);
   int nnodes = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::OWNED);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
   // select an analytic solution for error calculations and setup of
   // boundary conditions
   AnalyticElasticity01 ana(mesh);
-  std::cout<<"Hello World5"<<std::endl; 
+ 
   Teuchos::RCP<std::vector<WhetStone::Tensor> > K = Teuchos::rcp(new std::vector<WhetStone::Tensor>());
   for (int c = 0; c < ncells; c++) {
     const Point& xc = mesh->cell_centroid(c);
