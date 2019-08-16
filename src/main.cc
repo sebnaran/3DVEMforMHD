@@ -1,13 +1,21 @@
+//Trilinos
 #include "Teuchos_GlobalMPISession.hpp"
+#include "Teuchos_ParameterList.hpp"
+#include "Teuchos_ParameterXMLFileReader.hpp"
+//Amanzi
 #include "VerboseObject_objs.hh"
 #include "bilinear_form_registration.hh"
 #include "MeshFactory.hh"
+//#include "PDE_Elasticity.hh"
+//Proper
+#include "PDE_TestMHD.hh"
 
 int main(int argc, char *argv[]){
   using namespace Amanzi;
   using namespace Amanzi::AmanziMesh;
   using namespace Amanzi::AmanziGeometry;
-
+  using namespace Amanzi::Operators;
+  
   Teuchos::GlobalMPISession mpiSession(&argc, &argv); 
   auto comm = Amanzi::getDefaultComm();
 
@@ -25,10 +33,14 @@ int main(int argc, char *argv[]){
   // Selected [-1,1] x[-1,1]x[-1,1] with nx =2 ny=2 nz =2
   Teuchos::RCP<const Mesh> mesh = meshfactory.create(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0,2,2,2);
   
-  
+  //Teuchos::RCP<PDE_TestMHD> top = Teuchos::rcp(new PDE_TestMHD(mesh));
 
-  //int ncells = mesh->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED);
-  //  for (int c = 0; c < ncells; c++) {
-  //    const Point& xc = mesh->cell_centroid(c);
-  //  }
+
+  std::string xmlFileName = "test/operator_elasticity.xml";
+  Teuchos::ParameterXMLFileReader xmlreader(xmlFileName);
+  Teuchos::ParameterList plist = xmlreader.getParameters();
+  Teuchos::ParameterList op_list = plist.sublist("PK operator")
+                                        .sublist("elasticity operator");
+  Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
+  //Teuchos::RCP<PDE_MHD> op = Teuchos::rcp(new PDE_MHD(op_list, mesh));
 }
