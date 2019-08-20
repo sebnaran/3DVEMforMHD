@@ -8,7 +8,7 @@
 #include "MeshFactory.hh"
 //#include "PDE_Elasticity.hh"
 //Proper
-#include "PDE_TestMHD.hh"
+#include "PDE_Test.hh"
 
 int main(int argc, char *argv[]){
   using namespace Amanzi;
@@ -43,5 +43,5 @@ int main(int argc, char *argv[]){
                                         .sublist("elasticity operator");
   std::cout<<plist<<std::endl;
   //Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
-  Teuchos::RCP<Test_MHD> op = Teuchos::rcp(new Test_MHD(mesh));
+  Teuchos::RCP<PDE_Test> op = Teuchos::rcp(new PDE_Test(mesh));
 }
