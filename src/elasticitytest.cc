@@ -29,7 +29,8 @@
 #include "Tensor.hh"
 
 // Amanzi::Operators
-#include "PDE_Elasticity.hh"
+//#include "PDE_Elasticity.hh"
+#include "PDE_TestMHD.hh"
 #include "Verification.hh"
 #include "AnalyticElasticity01.hh"
 

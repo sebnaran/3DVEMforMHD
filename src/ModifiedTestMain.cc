@@ -107,11 +107,12 @@ int main(int argc, char *argv[]){
   // create a PDE: operator and boundary conditions
   // -- XML list speficies discretization method and location of degrees of freedom
   // -- (called schema). This seems redundant but only when use a low-order method.
+  std::cout<<op_list<<std::endl;
   Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
   op->SetBCs(bcf, bcf);
   op->AddBCs(bcv, bcv);
   const CompositeVectorSpace& cvs = op->global_operator()->DomainMap();
-
+ 
   // create and initialize solution
   CompositeVector solution(cvs);
   solution.PutScalar(0.0);
@@ -127,7 +128,7 @@ int main(int argc, char *argv[]){
   }
 
   // populate the elasticity operator
-  op->SetTensorCoefficient(K);
+  op->SetTensorCoefficient(K); 
   op->UpdateMatrices();
 
   // get and assmeble the global operator

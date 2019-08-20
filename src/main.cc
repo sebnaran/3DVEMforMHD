@@ -41,6 +41,7 @@ int main(int argc, char *argv[]){
   Teuchos::ParameterList plist = xmlreader.getParameters();
   Teuchos::ParameterList op_list = plist.sublist("PK operator")
                                         .sublist("elasticity operator");
-  Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
-  //Teuchos::RCP<PDE_MHD> op = Teuchos::rcp(new PDE_MHD(op_list, mesh));
+  std::cout<<plist<<std::endl;
+  //Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
+  Teuchos::RCP<Test_MHD> op = Teuchos::rcp(new Test_MHD(mesh));
 }
