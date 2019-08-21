@@ -1,3 +1,4 @@
+
 #ifndef AMANZI_OPERATOR_PDE_TESTMHD_HH_
 #define AMANZI_OPERATOR_PDE_TESTMHD_HH_
 
@@ -23,7 +24,7 @@ namespace Operators {
 class PDE_Test: public PDE_HelperDiscretization {
  public:
 //Constructor
-  PDE_Test(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh);
+  PDE_Test(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh,Teuchos::ParameterList& plist);
 //Destructor
 ~PDE_Test(){};
 //   // -- creation of an operator
