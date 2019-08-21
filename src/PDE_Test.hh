@@ -22,9 +22,10 @@ namespace Operators {
 
 class PDE_Test: public PDE_HelperDiscretization {
  public:
-
+//Constructor
   PDE_Test(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh);
-
+//Destructor
+~PDE_Test(){};
 //   // -- creation of an operator
    using PDE_HelperDiscretization::UpdateMatrices;
    virtual void UpdateMatrices(const Teuchos::Ptr<const CompositeVector>& u,

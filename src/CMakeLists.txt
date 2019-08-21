@@ -9,7 +9,6 @@ include_directories(${AMANZI}/include)
 include_directories(${TPLS}/include)
 include_directories(${TPLS}/include/UnitTest++)
 include_directories(${TPLS}/trilinos-12-12-1/include)
-#include_directories(${TPLS}/petsc-3.8.2/include/petsc/mpiuni)
 include_directories(${TPLS}/petsc-3.8.2/include)
 
 link_directories(${AMANZI}/lib 
@@ -55,12 +54,12 @@ set(TPLS_meshes mstk metis exodus netcdf)
 #                                  UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
 
 
- add_executable(ModifiedAmanziTest ModifiedTestMain.cc)
+#  add_executable(ModifiedAmanziTest ModifiedTestMain.cc)
 
- target_link_libraries(ModifiedAmanziTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
-                                         ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
-                                         UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
-   add_executable(Main main.cc Mesh.cc PDE_Test.cc)
+#  target_link_libraries(ModifiedAmanziTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+#                                          ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+#                                          UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
+ add_executable(Main main.cc Mesh.cc Operator_Schema.cc PDE_Test.cc)
 
  target_link_libraries(Main ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
                                            ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis

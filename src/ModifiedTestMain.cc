@@ -108,6 +108,10 @@ int main(int argc, char *argv[]){
   // -- XML list speficies discretization method and location of degrees of freedom
   // -- (called schema). This seems redundant but only when use a low-order method.
   std::cout<<op_list<<std::endl;
+  Teuchos::ParameterList& schema_list = op_list.sublist("schema");
+  auto whatareyou = schema_list.get<std::string>("base");
+  std::cout<< whatareyou <<std::endl;
+  std::cout<< typeid(whatareyou).name()<<std::endl;
   Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
   op->SetBCs(bcf, bcf);
   op->AddBCs(bcv, bcv);
