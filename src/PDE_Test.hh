@@ -35,7 +35,9 @@ class PDE_Test: public PDE_HelperDiscretization {
 //   // -- postprocessing: calculated stress u from displacement p
   virtual void UpdateFlux(const Teuchos::Ptr<const CompositeVector>& p,
                           const Teuchos::Ptr<CompositeVector>& u) override {};
-
+  Teuchos::RCP<CompositeVectorSpace> GetCVS(){return cvs_;};
+//Vector Space defined by the schema.
+Teuchos::RCP<CompositeVectorSpace> cvs_;
 };
 
 }  // namespace Operators

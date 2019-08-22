@@ -6,6 +6,7 @@
 #include "VerboseObject_objs.hh"
 #include "bilinear_form_registration.hh"
 #include "MeshFactory.hh"
+#include "LinearOperatorPCG.hh"
 //#include "PDE_Elasticity.hh"
 //Proper
 #include "PDE_Test.hh"
@@ -71,8 +72,36 @@ int main(int argc, char *argv[]){
   }
 
   Teuchos::RCP<Operator> tGlobal_Op = op -> global_operator();
-  std::cout<<"got here4"<<std::endl;
+  //std::cout<<"got here4"<<std::endl;
   tGlobal_Op->SymbolicAssembleMatrix();
   std::cout<<"Got here5"<<std::endl;
   tGlobal_Op->AssembleMatrix();
+  auto rcpA = tGlobal_Op->A();
+  std::cout<<"The assembled matrix is"<<std::endl;
+  std::cout<<*(rcpA.get())<<std::endl;
+  CompositeVector& rhs = *tGlobal_Op ->rhs();
+  auto & cvs = *(op->GetCVS());
+  std::cout<<"Got here6"<<std::endl;
+  std::cout<<"The rhs is"<<std::endl;
+  rhs.Print(std::cout);
+
+  Teuchos::ParameterList lop_list = plist.sublist("solvers")
+                                         .sublist("PCG").sublist("pcg parameters");
+  AmanziSolvers::LinearOperatorPCG<Operator, CompositeVector, CompositeVectorSpace>
+        pcg(tGlobal_Op, tGlobal_Op);
+  std::cout<<"Got here7"<<std::endl;
+   CompositeVector solution(cvs);
+   solution.PutScalar(0.0);
+   pcg.Init(lop_list);
+  std::cout<<"Got here8"<<std::endl;
+  std::cout<<lop_list<<std::endl;
+  std::cout<<"The initialized solution is"<<std::endl;
+  solution.Print(std::cout);
+    Teuchos::ParameterList slist = plist.sublist("preconditioners").sublist("Hypre AMG");
+  tGlobal_Op->InitializePreconditioner(slist);
+  tGlobal_Op->UpdatePreconditioner();
+  int ierr = pcg.ApplyInverse(rhs, solution);
+  std::cout<<ierr<<std::endl;
+  std::cout<<"The Solution is"<<std::endl;
+  solution.Print(std::cout);
 }
