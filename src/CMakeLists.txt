@@ -59,8 +59,14 @@ set(TPLS_meshes mstk metis exodus netcdf)
  target_link_libraries(ModifiedAmanziTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
                                          ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
                                          UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
- add_executable(Main main.cc Mesh.cc Operator_Schema.cc PDE_Test.cc)
+ add_executable(AssemLinSolv AssembleAndLinearSolve.cc Mesh.cc Operator_Schema.cc PDE_Test.cc)
 
- target_link_libraries(Main ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+ target_link_libraries(AssemLinSolv ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
                                            ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
                                            UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
+
+add_executable(TreeOpTest TreeOperatorTest.cc Mesh.cc Operator_Schema.cc PDE_Test.cc)
+
+target_link_libraries(TreeOpTest ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+                                   ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+                                   UnitTest++ epetra ${Boost_libs} ${HDF5_libs})
