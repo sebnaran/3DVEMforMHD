@@ -58,7 +58,7 @@ int main(int argc, char *argv[]){
   int nfaces = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::OWNED);
   int nfaces_wghost = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::ALL);
   int nnodes_wghost = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::ALL);
-  std::cout<<"Hello World4"<<std::endl;  
+
   // select an analytic solution for error calculations and setup of
   // boundary conditions
   AnalyticElasticity01 ana(mesh);
@@ -107,11 +107,9 @@ int main(int argc, char *argv[]){
   // create a PDE: operator and boundary conditions
   // -- XML list speficies discretization method and location of degrees of freedom
   // -- (called schema). This seems redundant but only when use a low-order method.
-  std::cout<<op_list<<std::endl;
+  std::cout<<"op_list="<<op_list<<std::endl;
+
   Teuchos::ParameterList& schema_list = op_list.sublist("schema");
-  auto whatareyou = schema_list.get<std::string>("base");
-  std::cout<< whatareyou <<std::endl;
-  std::cout<< typeid(whatareyou).name()<<std::endl;
   Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
   op->SetBCs(bcf, bcf);
   op->AddBCs(bcv, bcv);
