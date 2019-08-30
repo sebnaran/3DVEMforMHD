@@ -107,7 +107,6 @@ int main(int argc, char *argv[]){
   // create a PDE: operator and boundary conditions
   // -- XML list speficies discretization method and location of degrees of freedom
   // -- (called schema). This seems redundant but only when use a low-order method.
-  std::cout<<"op_list="<<op_list<<std::endl;
 
   Teuchos::ParameterList& schema_list = op_list.sublist("schema");
   Teuchos::RCP<PDE_Elasticity> op = Teuchos::rcp(new PDE_Elasticity(op_list, mesh));
@@ -126,6 +125,7 @@ int main(int argc, char *argv[]){
   for (int v = 0; v < nnodes; v++) {
     mesh->node_get_coordinates(v, &xv);
     Point tmp(ana.source_exact(xv, 0.0));
+    std::cout<<tmp<<std::endl;
     for (int k = 0; k < 2; ++k) src[k][v] = tmp[k];
   }
 
