@@ -62,6 +62,7 @@ int main(int argc, char *argv[]){
     mesh->node_get_coordinates(v, &xv);
     src[0][v] = 1;
   }
+  global_op->UpdateRHS(source, true);
   op_poisson->SetBCs(bcv, bcv);
   //Global assembly
   op_poisson->ApplyBCs(true, true, true);

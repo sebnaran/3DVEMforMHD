@@ -43,7 +43,9 @@ PDE_HelperDiscretization(mesh)
    local_op_ = Teuchos::rcp(new Op_Cell_Schema(p_schema,p_schema,mesh));
   //Now we populate the local matrices
    for (int c = 0; c < ncells_owned ; c++) {
+     double area = mesh->cell_area(c);  
      WhetStone::DenseMatrix Mcell(4,4);
+     
      Mcell(0,0) = 1.00, Mcell(0,1) = 1.00, Mcell(0,2) = 1, Mcell(0,3) = 1;
      Mcell(1,0) = 1.00, Mcell(1,1) = 1.00, Mcell(1,2) = 1, Mcell(1,3) = 1;
      Mcell(2,0) = 1.00, Mcell(2,1) = 1.00, Mcell(2,2) = 1, Mcell(2,3) = 1;
