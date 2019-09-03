@@ -43,13 +43,22 @@ PDE_HelperDiscretization(mesh)
    local_op_ = Teuchos::rcp(new Op_Cell_Schema(p_schema,p_schema,mesh));
   //Now we populate the local matrices
    for (int c = 0; c < ncells_owned ; c++) {
-     double area = mesh->cell_area(c);  
+     double area = mesh->cell_volume(c);
+     //Entity_ID_List * nodeids;
+    //  AmanziMesh::Entity_ID_List nodeids;
+    //  mesh->cell_get_nodes(c,&nodeids);
+    //  AmanziGeometry::Point x0,x1,x2,x3;
+    //  mesh -> node_get_coordinates(nodeids[0],&x0);
+    //  mesh -> node_get_coordinates(nodeids[1],&x1);
+    //  mesh -> node_get_coordinates(nodeids[2],&x2);  
+    //  mesh -> node_get_coordinates(nodeids[3],&x3);   
+    //  std::cout<<x0<<"|"<<x1<<"|"<<x2<<"|"<<x3<<std::endl;  
      WhetStone::DenseMatrix Mcell(4,4);
-     
      Mcell(0,0) = 1.00, Mcell(0,1) = 1.00, Mcell(0,2) = 1, Mcell(0,3) = 1;
      Mcell(1,0) = 1.00, Mcell(1,1) = 1.00, Mcell(1,2) = 1, Mcell(1,3) = 1;
      Mcell(2,0) = 1.00, Mcell(2,1) = 1.00, Mcell(2,2) = 1, Mcell(2,3) = 1;
      Mcell(3,0) = 1.00, Mcell(3,1) = 1.00, Mcell(3,2) = 1, Mcell(3,3) = 1;
+     //Mcell(0,0) = 2*(pow(area,2.0)/16), Mcell(0,1) = 0;
      local_op_->matrices[c] = Mcell;
     }
     //Now we can define the velocity and pressure spaces

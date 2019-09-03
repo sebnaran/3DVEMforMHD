@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
   if (fabs(xv[0]+1) < 1e-6 || fabs(xv[0] - 1.0) < 1e-6 ||
       fabs(xv[1]+1) < 1e-6 || fabs(xv[1] - 1.0) < 1e-6) {
       bcv_model[v] = OPERATOR_BC_DIRICHLET;
-      bcv_value[v] = 0;
+      bcv_value[v] = 25;
     }}
 
   Teuchos::RCP<PDE_SecondOrderPoisson> op_poisson = Teuchos::rcp(new PDE_SecondOrderPoisson(mesh));
@@ -89,4 +89,8 @@ int main(int argc, char *argv[]){
 
   CompositeVector& rhs = *global_op->rhs();
   int ierr = pcg.ApplyInverse(rhs, solution);
+  std::cout<<"sol is ="<<std::endl;
+  solution.Print(std::cout);
+  std::cout<<"rhs is"<<std::endl;
+  rhs.Print(std::cout);
 }
