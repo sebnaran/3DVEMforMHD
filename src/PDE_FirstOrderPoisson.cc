@@ -70,8 +70,8 @@ PDE_HelperDiscretization(mesh)
      div_local_op_->matrices[c] = Scell;
     }
     //Now we can define the velocity and pressure spaces
-    p_cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(p_schema, mesh)) );
-    u_cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(u_schema, mesh)) );
+    p_cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(p_schema, mesh,false)) );
+    u_cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(u_schema, mesh,false)) );
     //The constructor for a global operator requires a parameter list so we will create a dummy one
     Teuchos::ParameterList plist = Teuchos::ParameterList();
     //This line creates a global operator for the mass matrix

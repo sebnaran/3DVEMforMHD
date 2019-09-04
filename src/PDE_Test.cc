@@ -46,7 +46,7 @@ PDE_HelperDiscretization(mesh)
     local_op_->matrices[c] = Acell; 
   }
  // std::cout<<"Created the local matrices"<<std::endl;
-  cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(test_schema, mesh)) );
+  cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(test_schema, mesh,false)) );
   //std::cout<<"Created the vector space"<<std::endl;
   //std::cout<<global_op_<<std::endl;
 

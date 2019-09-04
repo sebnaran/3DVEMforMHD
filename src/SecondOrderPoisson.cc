@@ -8,6 +8,7 @@
 #include "MeshFactory.hh"
 #include "LinearOperatorPCG.hh"
 #include "TreeOperator.hh"
+#include "OutputXDMF.hh"
 
 //Proper
 #include "PDE_SecondOrderPoisson.hh"
@@ -93,4 +94,15 @@ int main(int argc, char *argv[]){
   solution.Print(std::cout);
   std::cout<<"rhs is"<<std::endl;
   rhs.Print(std::cout);
+  std::cout<<"The solution is"<<std::endl;
+  solution.Print(std::cout);
+  Teuchos::ParameterList iolist;
+  iolist.get<std::string>("file name base", "plot");
+  OutputXDMF io(iolist, mesh, true, false);
+  io.InitializeCycle(0,0);
+  const Epetra_MultiVector & sol = *solution.ViewComponent("node",false);
+  std::cout<<"The epetra version of sol is"<<std::endl;
+  std::cout<<sol<<std::endl;
+  io.WriteVector(*sol(0), "solution", AmanziMesh::NODE);
+  io.FinalizeCycle();
 }
