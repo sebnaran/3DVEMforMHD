@@ -39,7 +39,8 @@ class PDE_ElectroMagMHD: public PDE_HelperDiscretization {
 
 
 void LocalMagMatrix();
-void ContructLocalMatrix();
+//
+//void ContructLocalMatrix();
 //containers for local matrices
 Teuchos::RCP<Op> mag_local_op_;
 };

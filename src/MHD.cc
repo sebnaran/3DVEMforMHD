@@ -12,7 +12,7 @@
 #include "Polynomial.hh"
 //Proper
 #include "PDE_ElectroMagMHD.hh"
-
+#include "PolynomialByCoordinates.hh"
 int main(int argc, char *argv[]){
   using namespace Amanzi;
   using namespace Amanzi::AmanziMesh;
@@ -41,22 +41,36 @@ int main(int argc, char *argv[]){
   
   Teuchos::RCP<PDE_ElectroMagMHD> electro_op = Teuchos::rcp(new PDE_ElectroMagMHD(mesh));
   electro_op->LocalMagMatrix();
-  WhetStone::NumericalIntegration numi(mesh);
-  WhetStone::Polynomial poly(3,1);
-  double val;
-  poly(1, 0) = 2.0;
-  poly(1, 1) = 3.0;
-  poly(1, 2) = 4.0;
-  int cell(0);
-  std::cout<<poly<<std::endl;
-  std::vector<const WhetStone::WhetStoneFunction*> polys(1);
-  polys[0] = &poly;
-  val = numi.IntegrateFunctionsTriangulatedCell(cell, polys, poly.order());
-  std::cout<<"The integral over the cell is "<<val<<std::endl;
-  poly.set_origin(mesh->cell_centroid(cell));
-  std::cout<<poly<<std::endl;
-  val = numi.IntegrateFunctionsTriangulatedCell(cell, polys, poly.order());
-  std::cout<<"The integral over the cell is "<<val<<std::endl;
+  // WhetStone::NumericalIntegration numi(mesh);
+
+  // PolynomialByCoordinates pol(3,2);
+  // std::cout<<"The degree is"<<pol.GetDeg()<<"and the dim is"<<pol.GetDim()<<std::endl;
+  // auto poly = pol.GetPol1();
+
+  // WhetStone::Polynomial pol1(3,2);
+  // pol1(1,1) = 5;
+  // pol1(2,3) = 6;
+  // pol1(1,3) = 6;
+  // std::cout<<pol1<<std::endl;
+  // PolynomialByCoordinates Polys1(3,2,pol1,pol1,pol1);
+  // PolynomialByCoordinates Polys2(3,2,pol1,pol1,pol1);
+  // Amanzi::WhetStone::Polynomial polyf = Polys1.dot(Polys2);
+  // std::cout<<polyf<<std::endl;
+  // WhetStone::Polynomial poly(3,1);
+  // double val;
+  // poly(1, 0) = 2.0;
+  // poly(1, 1) = 3.0;
+  // poly(1, 2) = 4.0;
+  // int cell(0);
+  // std::cout<<poly<<std::endl;
+  // std::vector<const WhetStone::WhetStoneFunction*> polys(1);
+  // polys[0] = &poly;
+  // val = numi.IntegrateFunctionsTriangulatedCell(cell, polys, poly.order());
+  // std::cout<<"The integral over the cell is "<<val<<std::endl;
+  // poly.set_origin(mesh->cell_centroid(cell));
+  // std::cout<<poly<<std::endl;
+  // val = numi.IntegrateFunctionsTriangulatedCell(cell, polys, poly.order());
+  // std::cout<<"The integral over the cell is "<<val<<std::endl;
    //Next we will define the boundary conditions
   // Teuchos::RCP<BCs> bcv = Teuchos::rcp(new BCs(mesh, AmanziMesh::NODE, WhetStone::DOF_Type::SCALAR));
   // std::vector<int>& bcv_model = bcv->bc_model();
