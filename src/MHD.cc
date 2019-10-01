@@ -13,6 +13,7 @@
 //Proper
 #include "PDE_ElectroMagMHD.hh"
 #include "PolynomialByCoordinates.hh"
+#include "InitialMagneticField.hh"
 int main(int argc, char *argv[]){
   using namespace Amanzi;
   using namespace Amanzi::AmanziMesh;
@@ -41,6 +42,7 @@ int main(int argc, char *argv[]){
   
   Teuchos::RCP<PDE_ElectroMagMHD> electro_op = Teuchos::rcp(new PDE_ElectroMagMHD(mesh));
   electro_op->LocalMagMatrix();
+  InitialMagneticField Bz;
   // WhetStone::NumericalIntegration numi(mesh);
 
   // PolynomialByCoordinates pol(3,2);

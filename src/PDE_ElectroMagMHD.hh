@@ -24,8 +24,7 @@ namespace Operators {
 class PDE_ElectroMagMHD: public PDE_HelperDiscretization {
  public:
 //Constructor
-  PDE_ElectroMagMHD(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh)://,Teuchos::ParameterList& plist);
-  PDE_HelperDiscretization(mesh){}
+  PDE_ElectroMagMHD(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh);
 //Destructor
 ~PDE_ElectroMagMHD(){};
 //   // -- creation of an operator
@@ -39,9 +38,20 @@ class PDE_ElectroMagMHD: public PDE_HelperDiscretization {
 
 
 void LocalMagMatrix();
+CompositeVector MagneticDOFs(WhetStone::WhetStoneFunction* Bx,
+                             WhetStone::WhetStoneFunction* By,
+                             WhetStone::WhetStoneFunction* Bz);
 //
 //void ContructLocalMatrix();
-//containers for local matrices
+
+
+//accessors
+Teuchos::RCP<CompositeVectorSpace> Getmagcvs(){return magcvs_;};
+
+
+//Variables relating to the magnetic field
+Schema magschema_;
+Teuchos::RCP<CompositeVectorSpace> magcvs_;
 Teuchos::RCP<Op> mag_local_op_;
 };
 

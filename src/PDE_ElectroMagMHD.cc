@@ -28,6 +28,22 @@
 namespace Amanzi {
 namespace Operators {
 
+PDE_ElectroMagMHD::PDE_ElectroMagMHD(const Teuchos::RCP<const AmanziMesh::Mesh>& mesh):
+  PDE_HelperDiscretization(mesh){
+  //Creating the magnetic schema
+  magschema_.SetBase(AmanziMesh::CELL);
+  //The cell degrees of freedom are moments agaist these
+  //pg_0 = (0,0,yP) pg_1 = (zP,0,0) pg_2=(0,xP,0)
+  magschema_.AddItem(AmanziMesh::CELL,WhetStone::DOF_Type::SCALAR,3);
+  
+  //The basis used follows the order:
+  magschema_.AddItem(AmanziMesh::FACE,WhetStone::DOF_Type::SCALAR,4);
+  magschema_.Finalize(mesh_); // computes the starting position of the dof ids
+  magcvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(magschema_, mesh_,false)) );
+  mag_local_op_ = Teuchos::rcp(new Op_Cell_Schema(magschema_,magschema_,mesh_));
+  }
+
+
 void PDE_ElectroMagMHD::UpdateMatrices(const Teuchos::Ptr<const CompositeVector>& u,
                                            const Teuchos::Ptr<const CompositeVector>& p)
 {
@@ -37,18 +53,6 @@ void PDE_ElectroMagMHD::UpdateMatrices(const Teuchos::Ptr<const CompositeVector>
 ////////////////////////////////////////////////////////////////////////////////////
 
 void PDE_ElectroMagMHD::LocalMagMatrix(){
-  Schema magschema;
-  magschema.SetBase(AmanziMesh::CELL);
-  //The basis used follows the order:
-  //pg_0 = (0,0,yP) pg_1 = (zP,0,0) pg_2=(0,xP,0)
-  magschema.AddItem(AmanziMesh::CELL,WhetStone::DOF_Type::SCALAR,3);
-  
-  //The basis used follows the order:
-  magschema.AddItem(AmanziMesh::FACE,WhetStone::DOF_Type::SCALAR,4);
-  
-  magschema.Finalize(mesh_); // computes the starting position of the dof ids
-  //
-  mag_local_op_ = Teuchos::rcp(new Op_Cell_Schema(magschema,magschema,mesh_));
   //now we populate the local matrices.
   //for (int c = 0; c < ncells_owned; c++){
   for (int c = 0; c < 1; c++){
@@ -93,6 +97,9 @@ void PDE_ElectroMagMHD::LocalMagMatrix(){
     std::vector<PolynomialByCoordinates*> basis{&q0,&q1,&q2,&q3,&q4,&q5,&q6,&q7,&q8,&q9,&q10,&q11};
     WhetStone::NumericalIntegration numi(mesh_); 
     std::vector<const WhetStone::WhetStoneFunction*> polys(1);
+    unsigned int num_faces = mesh_->cell_get_num_faces(c);
+    unsigned int num_local_dof = 4*num_faces+3;
+    WhetStone::DenseMatrix D(num_local_dof,12);
     WhetStone::DenseMatrix G(12,12);
     WhetStone::Polynomial poly;
     for(int i = 0;i < 12;i++){
@@ -102,19 +109,24 @@ void PDE_ElectroMagMHD::LocalMagMatrix(){
         poly = basis[i]->dot(*basis[j]);
         polys[0] = &poly;
         G(i,j) = numi.IntegrateFunctionsTriangulatedCell(c, polys, poly.order());
+        if (i<3){
+          D(i,j) = G(i,j);  
+        }
       }
     }
-    std::cout<<G<<std::endl;
-    // for (int i = 0; i < 12; i++){
-    //   basis[i].SetDimDeg(3,1);
-    // }
+    AmanziMesh::Entity_ID_List faceids;
+    mesh_->cell_get_faces(c,&faceids);
+
+  //  for(int i = 3;i < num_local_dof;i++){
+  //     for(int j = 0;j <12;j++){
+  //         D(i,j) = 1;
+  //         std::cout<<faceids[i]<<std::endl;
+  //     }
+  //  }
 
 
 
 
-    // WhetStone::NumericalIntegration numi(mesh_);
-    // WhetStone::Polynomial poly(3,2);
-    // WhetStone::DenseMatrix G(12,12);
     // //row 0
     // poly(2,3) = 1;
     // poly.set_origin(mesh_->cell_centroid(c));
@@ -205,6 +217,16 @@ void PDE_ElectroMagMHD::LocalMagMatrix(){
    
   
 }
+
+CompositeVector PDE_ElectroMagMHD::MagneticDOFs(WhetStone::WhetStoneFunction* Bx,
+                                                WhetStone::WhetStoneFunction* By,
+                                                WhetStone::WhetStoneFunction* Bz){
+CompositeVector Bh(*magcvs_);
+std::cout<<Bh.NumComponents()<<std::endl;
+return Bh;
+}
+
+
 
 }  // namespace Operators
 }  // namespace Amanzi
