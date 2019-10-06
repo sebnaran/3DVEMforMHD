@@ -39,14 +39,14 @@ set(Nox_interface_libs belostpetra belosepetra belos ml ifpack amesos aztecoo ep
                         teuchoskokkoscomm teuchoskokkoscompat teuchosremainder teuchosnumerics teuchoscomm
                         teuchosparameterlist teuchoscore liblapack.so libblas.so libblas.so)
 
-set (Boost_libs boost_system boost_filesystem)
+set(Boost_libs boost_system boost_filesystem)
 
 set(HDF5_libs hdf5_hl hdf5 hdf5_hl libz.so m dl)
 
 set(TPLS_meshes mstk metis exodus netcdf)
 
 
-#add_subdirectory(summertest)
+add_subdirectory(summertest)
 
 add_executable(MHD MHD.cc PDE_ElectroMagMHD.cc)
 

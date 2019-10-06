@@ -42,7 +42,10 @@ int main(int argc, char *argv[]){
   
   Teuchos::RCP<PDE_ElectroMagMHD> electro_op = Teuchos::rcp(new PDE_ElectroMagMHD(mesh));
   electro_op->LocalMagMatrix();
-  InitialMagneticField Bz;
+  InitialMagneticFieldx Bx;
+  InitialMagneticFieldy By;
+  InitialMagneticFieldz Bz;
+  CompositeVector Bh = electro_op->MagneticDOFs(&Bx,&By,&Bz);
   // WhetStone::NumericalIntegration numi(mesh);
 
   // PolynomialByCoordinates pol(3,2);

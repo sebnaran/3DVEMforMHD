@@ -222,7 +222,18 @@ CompositeVector PDE_ElectroMagMHD::MagneticDOFs(WhetStone::WhetStoneFunction* Bx
                                                 WhetStone::WhetStoneFunction* By,
                                                 WhetStone::WhetStoneFunction* Bz){
 CompositeVector Bh(*magcvs_);
-std::cout<<Bh.NumComponents()<<std::endl;
+//Bh.PutScalar("cell",3);
+//std::vector<double> scalar(3);
+//scalar[0] = 1, scalar[1] = 2, scalar[2] = 3;
+Teuchos::RCP<Epetra_MultiVector> Bcells = Bh.ViewComponent("cell", false); 
+//Epetra_Multivector & Bhf = Bh.ViewComponent("face");
+//std::cout<<*Bcells<<std::endl;
+for (int c = 0; c < ncells_owned; c++){
+    //  Bcells[c][0] = 1;
+    //  Bcells[c][1] = 2;
+    //  Bcells[c][2] = 3;
+}
+Bh.Print(std::cout);
 return Bh;
 }
 
