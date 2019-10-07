@@ -45,7 +45,8 @@ PDE_HelperDiscretization(mesh)
    for (int c = 0; c < ncells_owned ; c++) {
     // AmanziGeometry::Point vP = mesh_->cell_centroid(c);
     //std::cout<<mesh_->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED)<<std::endl;
-    mesh -> cell_get_edges(c, &edgeids);
+    mesh -> cell_get_faces(c, &edgeids);
+    std::cout<<edgeids[0]<<std::endl;
     //  AmanziMesh::Entity_ID Node0,Node1,Node2,Node3;
     //  mesh_ -> edge_get_nodes(edgeids[0],&Node0,&Node1);
     //  mesh_ -> edge_get_nodes(edgeids[1],&Node1,&Node2);
