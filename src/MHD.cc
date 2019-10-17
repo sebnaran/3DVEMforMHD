@@ -46,6 +46,7 @@ int main(int argc, char *argv[]){
   InitialMagneticFieldy By;
   InitialMagneticFieldz Bz;
   CompositeVector Bh = electro_op->MagneticDOFs(&Bx,&By,&Bz);
+  std::cout<<"hello World"<<std::endl;
   // WhetStone::NumericalIntegration numi(mesh);
 
   // PolynomialByCoordinates pol(3,2);

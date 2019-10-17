@@ -40,51 +40,77 @@ PDE_HelperDiscretization(mesh)
   //
   //Next we will create a container for the local matrices 
    local_op_ = Teuchos::rcp(new Op_Cell_Schema(p_schema,p_schema,mesh));
-  //Now we populate the local matrices
+  //These are the structures that we require to build the local matrices
    AmanziMesh::Entity_ID_List edgeids;
+   AmanziGeometry::Point vP;
+   AmanziMesh::Entity_ID Node0,Node1,Node2,Node3;
+   AmanziMesh::Entity_ID_List nodeids;
+   AmanziGeometry::Point v0,v1,v2,v3;
+   WhetStone::DenseMatrix N(4,3);
+   AmanziGeometry::Point n0,n1,n2,n3;
+   WhetStone::DenseMatrix R(4,3);
+   WhetStone::DenseMatrix Mcell(4,4);
+   WhetStone::DenseMatrix temp1(3,3);
+   WhetStone::DenseMatrix temp2(3,3);
+   double lambda;
+   double l0,l1,l2,l3;
+   //Now we will populate these matrices
    for (int c = 0; c < ncells_owned ; c++) {
-    // AmanziGeometry::Point vP = mesh_->cell_centroid(c);
-    //std::cout<<mesh_->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED)<<std::endl;
-    mesh -> cell_get_faces(c, &edgeids);
-    std::cout<<edgeids[0]<<std::endl;
-    //  AmanziMesh::Entity_ID Node0,Node1,Node2,Node3;
-    //  mesh_ -> edge_get_nodes(edgeids[0],&Node0,&Node1);
-    //  mesh_ -> edge_get_nodes(edgeids[1],&Node1,&Node2);
-    //  mesh_ -> edge_get_nodes(edgeids[2],&Node2,&Node3);
-     //AmanziMesh::Entity_ID_List nodeids;
-    // mesh->cell_get_nodes(c,&nodeids);
-    //  AmanziGeometry::Point v0,v1,v2,v3;
-    //  mesh_ -> node_get_coordinates(Node0,&v0);
-    //  mesh_ -> node_get_coordinates(Node1,&v1);
-    //  mesh_ -> node_get_coordinates(Node2,&v2);  
-    //  mesh_ -> node_get_coordinates(Node3,&v3); 
+    
+    vP = mesh_->cell_centroid(c);
+    mesh -> cell_get_edges(c, &edgeids);
+    
+    mesh_ -> edge_get_nodes(edgeids[0],&Node0,&Node1);
+    mesh_ -> edge_get_nodes(edgeids[1],&Node1,&Node2);
+    mesh_ -> edge_get_nodes(edgeids[2],&Node2,&Node3);
+   
+    mesh_ -> node_get_coordinates(Node0,&v0);
+    mesh_ -> node_get_coordinates(Node1,&v1);
+    mesh_ -> node_get_coordinates(Node2,&v2);  
+    mesh_ -> node_get_coordinates(Node3,&v3); 
 
-    //  WhetStone::DenseMatrix N(4,3);
-    //  N(0,0) = 1, N(0,1) = v0[0]-vP[0], N(0,2) = v0[1]-vP[1];  
-    //  N(1,0) = 1, N(1,1) = v1[0]-vP[0], N(1,2) = v1[1]-vP[1];
-    //  N(2,0) = 1, N(2,1) = v2[0]-vP[0], N(2,2) = v2[1]-vP[1];
-    //  N(3,0) = 1, N(3,1) = v3[0]-vP[0], N(3,2) = v3[1]-vP[1];
+     N(0,0) = 1, N(0,1) = v0[0]-vP[0], N(0,2) = v0[1]-vP[1];  
+     N(1,0) = 1, N(1,1) = v1[0]-vP[0], N(1,2) = v1[1]-vP[1];
+     N(2,0) = 1, N(2,1) = v2[0]-vP[0], N(2,2) = v2[1]-vP[1];
+     N(3,0) = 1, N(3,1) = v3[0]-vP[0], N(3,2) = v3[1]-vP[1];
      
-    //  double l0 = mesh_ -> edge_length(edgeids[0]);
-    //  double l1 = mesh_ -> edge_length(edgeids[1]);
-    //  double l2 = mesh_ -> edge_length(edgeids[2]);
-    //  double l3 = mesh_ -> edge_length(edgeids[3]);
+     l0 = mesh_ -> edge_length(edgeids[0]);
+     l1 = mesh_ -> edge_length(edgeids[1]);
+     l2 = mesh_ -> edge_length(edgeids[2]);
+     l3 = mesh_ -> edge_length(edgeids[3]);
 
-    //  AmanziGeometry::Point n0,n1,n2,n3;
-    //  n0 = mesh_ -> face_normal(edgeids[0],false,c);
-    //  n1 = mesh_ -> face_normal(edgeids[1],false,c);
-    //  n2 = mesh_ -> face_normal(edgeids[2],false,c);
-    //  n3 = mesh_ -> face_normal(edgeids[3],false,c);
-    //  std::cout<<n0<<std::endl;
-    //  WhetStone::DenseMatrix R(4,3);
+     n0 = mesh_ -> face_normal(edgeids[0],false,c);
+     n1 = mesh_ -> face_normal(edgeids[1],false,c);
+     n2 = mesh_ -> face_normal(edgeids[2],false,c);
+     n3 = mesh_ -> face_normal(edgeids[3],false,c);
 
-     //R(0,0) = 0, R(0,1) = , R(0,2)= 
-     WhetStone::DenseMatrix Mcell(4,4);
-     Mcell(0,0) = 1.00, Mcell(0,1) = 1.00, Mcell(0,2) = 1, Mcell(0,3) = 1;
-     Mcell(1,0) = 1.00, Mcell(1,1) = 1.00, Mcell(1,2) = 1, Mcell(1,3) = 1;
-     Mcell(2,0) = 1.00, Mcell(2,1) = 1.00, Mcell(2,2) = 1, Mcell(2,3) = 1;
-     Mcell(3,0) = 1.00, Mcell(3,1) = 1.00, Mcell(3,2) = 1, Mcell(3,3) = 1;
-     //Mcell(0,0) = 2*(pow(area,2.0)/16), Mcell(0,1) = 0;
+     R(0,0) = 0, R(0,1) = l3*n3[0]+l0*n0[0], R(0,2) = l3*n3[1]+l0*n0[1];
+     R(1,0) = 0, R(1,1) = l0*n0[0]+l1*n1[0], R(1,2) = l0*n0[1]+l1*n1[1];
+     R(2,0) = 0, R(2,1) = l1*n1[0]+l2*n2[0], R(2,2) = l1*n1[1]+l2*n2[1];
+     R(3,0) = 0, R(3,1) = l2*n2[0]+l3*n3[0], R(3,2) = l2*n2[1]+l3*n3[1];
+
+    //Mcell = R(R^TN)^t R^T+[tr(R(R^TN)^t R^T)]*(Id-N(N^TN)^{-1}N^T)/2
+
+    int k1 = temp1.Multiply(R,N,true);
+    //lambda = temp1.Trace();
+    //int k2 = temp1.Inverse();
+    temp2.Multiply(temp1,temp1,true);
+    int k2 = temp2.Inverse();
+    //temp2
+    int k3 = temp2.Multiply(R,temp1,false);
+    int k4 = R.Transpose();
+    int k5 = Mcell.Multiply(temp2,R,false); 
+    std::cout<<"k1="<<k1<<std::endl;
+    std::cout<<"k2="<<k2<<std::endl;
+    std::cout<<"k3="<<k3<<std::endl;
+    std::cout<<"k4="<<k4<<std::endl;
+    std::cout<<"k5="<<k5<<std::endl;
+    std::cout<<temp1<<std::endl;
+    //  Mcell(0,0) = 1.00, Mcell(0,1) = 1.00, Mcell(0,2) = 1, Mcell(0,3) = 1;
+    //  Mcell(1,0) = 1.00, Mcell(1,1) = 1.00, Mcell(1,2) = 1, Mcell(1,3) = 1;
+    //  Mcell(2,0) = 1.00, Mcell(2,1) = 1.00, Mcell(2,2) = 1, Mcell(2,3) = 1;
+    //  Mcell(3,0) = 1.00, Mcell(3,1) = 1.00, Mcell(3,2) = 1, Mcell(3,3) = 1;
+    //Mcell(0,0) = 2*(pow(area,2.0)/16), Mcell(0,1) = 0;
      local_op_->matrices[c] = Mcell;
     }
     //Now we can define the velocity and pressure spaces

@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
   //                           const int nx, const int ny,
   //                           const bool request_faces=true,
   //                           const bool request_edges=false);
-  Teuchos::RCP<const Mesh> mesh = meshfactory.create(-1,-1,1,1,3,3);
+  Teuchos::RCP<const Mesh> mesh = meshfactory.create(-1,-1,1,1,3,3,true,true);
   int ncells = mesh->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED);
   int nnodes = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::OWNED);
   int nfaces = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::OWNED);
