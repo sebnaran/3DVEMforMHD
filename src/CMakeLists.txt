@@ -8,16 +8,16 @@ include_directories(${SourceFiles_SOURCE_DIRS})
 include_directories(${AMANZI}/include)
 include_directories(${TPLS}/include)
 include_directories(${TPLS}/include/UnitTest++)
-include_directories(${TPLS}/trilinos-12-12-1/include)
+include_directories(${TPLS}/trilinos-12-14-0bf557717e-Jun17/include)
 include_directories(${TPLS}/petsc-3.8.2/include)
 link_directories(${AMANZI}/lib 
                  ${TPLS}/lib
-                 ${TPLS}/trilinos-12-12-1/lib
+                 ${TPLS}/trilinos-12-14-0bf557717e-Jun17/lib
                  ${TPLS}/SEACAS/lib
                  /usr/lib/x86_64-linux-gnu/)
 
 #########################################################################################################
-set(Amanzi_libs mesh mesh_factory mstk_mesh simple_mesh geometry 
+set(Amanzi_libs mesh mesh_factory mesh_extracted mstk_mesh simple_mesh geometry 
                 operators solvers data_structures whetstone output atk error_handling)
 
 set(Teuchos_libs teuchoskokkoscomm teuchoskokkoscompat teuchosremainder teuchosnumerics teuchoscomm
@@ -48,10 +48,10 @@ set(TPLS_meshes mstk metis exodus netcdf)
 
 add_subdirectory(summertest)
 
-add_executable(MHD MHD.cc PDE_ElectroMagMHD.cc)
+# add_executable(MHD MHD.cc PDE_ElectroMagMHD.cc)
 
-target_link_libraries(MHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
-                          ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
-                          UnitTest++ epetra ${Boost_libs} ${HDF5_libs} ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs}
-                          ${Epetra_interface_libs} ${Teuchos_libs} ${Nox_libs} ${Nox_interface_libs} HYPRE 
-                          superlu_dist superlu parmetis metis UnitTest++ epetra ${Boost_libs} ${HDF5_libs} ascemio)
+# target_link_libraries(MHD ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs} ${Epetra_interface_libs} ${Teuchos_libs}  
+#                           ${Nox_libs} ${Nox_interface_libs} HYPRE superlu_dist superlu parmetis metis
+#                           UnitTest++ epetra ${Boost_libs} ${HDF5_libs} ${Amanzi_libs} ${TPLS_meshes} ${Epetra_libs}
+#                           ${Epetra_interface_libs} ${Teuchos_libs} ${Nox_libs} ${Nox_interface_libs} HYPRE 
+#                           superlu_dist superlu parmetis metis UnitTest++ epetra ${Boost_libs} ${HDF5_libs} ascemio)

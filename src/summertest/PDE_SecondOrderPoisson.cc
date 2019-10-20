@@ -33,7 +33,7 @@ PDE_HelperDiscretization(mesh)
   //std::cout<<"Entering Constructor"<<std::endl;
   Schema p_schema;
   //The assembly should run over the cells thus its base are the cells
-  p_schema.SetBase(AmanziMesh::CELL);
+  p_schema.set_base(AmanziMesh::CELL);
   //The pressure DOFs are cell-based and scalars.
   p_schema.AddItem(AmanziMesh::NODE,WhetStone::DOF_Type::SCALAR,1);
   p_schema.Finalize(mesh); // computes the starting position of the dof ids
@@ -42,16 +42,21 @@ PDE_HelperDiscretization(mesh)
    local_op_ = Teuchos::rcp(new Op_Cell_Schema(p_schema,p_schema,mesh));
   //These are the structures that we require to build the local matrices
    AmanziMesh::Entity_ID_List edgeids;
-   AmanziGeometry::Point vP;
    AmanziMesh::Entity_ID Node0,Node1,Node2,Node3;
    AmanziMesh::Entity_ID_List nodeids;
+
    AmanziGeometry::Point v0,v1,v2,v3;
-   WhetStone::DenseMatrix N(4,3);
    AmanziGeometry::Point n0,n1,n2,n3;
+   AmanziGeometry::Point vP;
+
+   WhetStone::DenseMatrix N(4,3);
    WhetStone::DenseMatrix R(4,3);
+   WhetStone::DenseMatrix TR(3,4);
    WhetStone::DenseMatrix Mcell(4,4);
+   WhetStone::DenseMatrix Scell(4,4);
    WhetStone::DenseMatrix temp1(3,3);
-   WhetStone::DenseMatrix temp2(3,3);
+   WhetStone::DenseMatrix temp2(4,3);
+
    double lambda;
    double l0,l1,l2,l3;
    //Now we will populate these matrices
@@ -92,26 +97,32 @@ PDE_HelperDiscretization(mesh)
     //Mcell = R(R^TN)^t R^T+[tr(R(R^TN)^t R^T)]*(Id-N(N^TN)^{-1}N^T)/2
 
     int k1 = temp1.Multiply(R,N,true);
-    //lambda = temp1.Trace();
-    //int k2 = temp1.Inverse();
-    temp2.Multiply(temp1,temp1,true);
-    int k2 = temp2.Inverse();
-    //temp2
+    int k2 = temp1.InverseMoorePenrose();
     int k3 = temp2.Multiply(R,temp1,false);
-    int k4 = R.Transpose();
-    int k5 = Mcell.Multiply(temp2,R,false); 
-    std::cout<<"k1="<<k1<<std::endl;
-    std::cout<<"k2="<<k2<<std::endl;
-    std::cout<<"k3="<<k3<<std::endl;
-    std::cout<<"k4="<<k4<<std::endl;
-    std::cout<<"k5="<<k5<<std::endl;
-    std::cout<<temp1<<std::endl;
-    //  Mcell(0,0) = 1.00, Mcell(0,1) = 1.00, Mcell(0,2) = 1, Mcell(0,3) = 1;
-    //  Mcell(1,0) = 1.00, Mcell(1,1) = 1.00, Mcell(1,2) = 1, Mcell(1,3) = 1;
-    //  Mcell(2,0) = 1.00, Mcell(2,1) = 1.00, Mcell(2,2) = 1, Mcell(2,3) = 1;
-    //  Mcell(3,0) = 1.00, Mcell(3,1) = 1.00, Mcell(3,2) = 1, Mcell(3,3) = 1;
-    //Mcell(0,0) = 2*(pow(area,2.0)/16), Mcell(0,1) = 0;
-     local_op_->matrices[c] = Mcell;
+    //std::cout<<"R="<<R<<std::endl;
+    TR.Transpose(R);
+    //std::cout<<"TR="<<TR<<std::endl;
+    int k4 = Mcell.Multiply(temp2,TR,false);
+    lambda = temp1.Trace();
+    
+    int d1 = temp1.Multiply(N,N,true);
+    int d2 = temp1.InverseSPD();
+    int d3 = temp2.Multiply(N,temp1,false);
+    //std::cout<<"N="<<N<<std::endl;
+    TR.Transpose(N);
+    //std::cout<<"TR="<<TR<<std::endl;
+    int d4 = Scell.Multiply(temp2,TR,false);
+    for(int i=0;i<4;i++){
+      for(int j=0;j<4;j++){
+         if(i==j){
+           Scell(i,j) = lambda*(1-Scell(i,j))/2;
+         }
+         else{
+           Scell(i,j) = -lambda*(Scell(i,j))/2;
+         }
+      }
+    }
+    local_op_->matrices[c] = Mcell+Scell;
     }
     //Now we can define the velocity and pressure spaces
     cvs_ = Teuchos::rcp( new CompositeVectorSpace (cvsFromSchema(p_schema, mesh,false)) );

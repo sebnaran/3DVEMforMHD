@@ -30,7 +30,8 @@ int main(int argc, char *argv[]){
   //                           const int nx, const int ny,
   //                           const bool request_faces=true,
   //                           const bool request_edges=false);
-  Teuchos::RCP<const Mesh> mesh = meshfactory.create(-1,-1,1,1,3,3,true,true);
+  int n = 20;
+  Teuchos::RCP<const Mesh> mesh = meshfactory.create(-1,-1,1,1,n,n,true,true);
   int ncells = mesh->num_entities(AmanziMesh::CELL, AmanziMesh::Parallel_type::OWNED);
   int nnodes = mesh->num_entities(AmanziMesh::NODE, AmanziMesh::Parallel_type::OWNED);
   int nfaces = mesh->num_entities(AmanziMesh::FACE, AmanziMesh::Parallel_type::OWNED);
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]){
   if (fabs(xv[0]+1) < 1e-6 || fabs(xv[0] - 1.0) < 1e-6 ||
       fabs(xv[1]+1) < 1e-6 || fabs(xv[1] - 1.0) < 1e-6) {
       bcv_model[v] = OPERATOR_BC_DIRICHLET;
-      bcv_value[v] = 25;
+      bcv_value[v] = exp(xv[0])*sin(xv[1]);
     }}
 
   Teuchos::RCP<PDE_SecondOrderPoisson> op_poisson = Teuchos::rcp(new PDE_SecondOrderPoisson(mesh));
@@ -61,7 +62,7 @@ int main(int argc, char *argv[]){
   Epetra_MultiVector& src = *source.ViewComponent("node");
   for (int v = 0; v < nnodes; v++) {
     mesh->node_get_coordinates(v, &xv);
-    src[0][v] = 1;
+    src[0][v] = 0;
   }
   global_op->UpdateRHS(source, true);
   op_poisson->SetBCs(bcv, bcv);
